@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import WeatherWidget from './WeatherWidget';
 import { WeatherService } from '../services/weatherService';
+import { TemperatureUnit } from '../types/weather';
 
 // Mock the WeatherService
 jest.mock('../services/weatherService');
@@ -52,8 +53,8 @@ describe('WeatherWidget - Integration Tests', () => {
 
     // Set up API mocks for different units
     mockWeatherService.fetchWeatherData
-      .mockImplementation((city: string, unit: 'celsius' | 'fahrenheit') => {
-        if (unit === 'celsius') {
+      .mockImplementation((city: string, unit?: TemperatureUnit) => {
+        if (unit === 'celsius' || !unit) {
           return new Promise(resolve => setTimeout(() => resolve(mockWeatherDataCelsius), 50));
         } else {
           return new Promise(resolve => setTimeout(() => resolve(mockWeatherDataFahrenheit), 50));
