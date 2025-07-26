@@ -1,0 +1,219 @@
+{
+  "tubeMapData": {
+    "journeys": [
+      {
+        "id": "journey-make-payment",
+        "name": "Make a Payment",
+        "description": "Enable customers to make domestic and international payments",
+        "domain": "Payments",
+        "position": { "x": 100, "y": 200 },
+        "capabilities": [
+          "Domestic Transfers",
+          "International Payments", 
+          "Standing Orders",
+          "Payment Templates"
+        ],
+        "connections": ["journey-account-management", "journey-fraud-prevention"],
+        "architectureLayers": [
+          {
+            "id": "ui-mobile",
+            "name": "Mobile App UI",
+            "type": "UI",
+            "description": "Native iOS/Android mobile application",
+            "technologies": ["React Native", "Swift", "Kotlin"],
+            "dependencies": ["mid-tier-api"]
+          },
+          {
+            "id": "mid-tier-api",
+            "name": "Mid-tier API Gateway",
+            "type": "Mid-tier",
+            "description": "API orchestration and business logic layer",
+            "technologies": ["Spring Boot", "Java", "Kong Gateway"],
+            "dependencies": ["core-banking-db", "legacy-mainframe"]
+          },
+          {
+            "id": "core-banking-db",
+            "name": "Core Banking Database",
+            "type": "Database", 
+            "description": "Modern core banking system database",
+            "technologies": ["Oracle", "PostgreSQL", "Redis Cache"],
+            "dependencies": []
+          }
+        ],
+        "painPoints": [
+          {
+            "id": "pp-payment-limits",
+            "title": "Complex Payment Limits",
+            "description": "Multiple overlapping payment limits causing customer confusion",
+            "severity": "Medium",
+            "impact": "Customer abandonment during payment flow",
+            "annotations": ["UX Issue", "Business Rules"],
+            "createdAt": "2024-01-12T00:00:00.000Z",
+            "updatedAt": "2024-01-22T00:00:00.000Z"
+          }
+        ],
+        "subJourneys": [
+          {
+            "id": "subjourney-domestic-payment",
+            "name": "Domestic Payment",
+            "description": "Process payments within the UK via Faster Payments",
+            "position": { "x": 50, "y": 100 },
+            "capabilities": ["Faster Payments", "Sort Code Validation", "Real-time Processing"],
+            "architectureLayers": [],
+            "painPoints": [],
+            "metrics": {
+              "portfolioEpicsCount": 3,
+              "linkedFutureEpicsCount": 2,
+              "businessOutcomeMapping": "Increase payment completion rate by 15%",
+              "featuresCount": 8,
+              "storiesCount": 24,
+              "ragStatus": "Green"
+            }
+          }
+        ],
+        "epics": [
+          {
+            "id": "epic-payment-ui-modernization",
+            "title": "Payment UI Modernization", 
+            "description": "Modernize payment interface across all channels",
+            "status": "Green",
+            "priority": "High",
+            "businessOutcome": "Improve payment completion rate and reduce customer service calls",
+            "domain": "Payments",
+            "estimatedEffort": 13,
+            "linkedFutureEpics": ["epic-payment-analytics", "epic-payment-ai"],
+            "features": [
+              {
+                "id": "feature-mobile-payment-flow",
+                "title": "Mobile Payment Flow Enhancement",
+                "description": "Streamlined mobile payment experience",
+                "status": "Completed",
+                "dependencies": [],
+                "stories": [
+                  {
+                    "id": "story-payment-form-validation",
+                    "title": "Real-time Payment Form Validation",
+                    "description": "As a customer, I want real-time validation so I can correct errors immediately",
+                    "storyPoints": 5,
+                    "status": "Done",
+                    "acceptanceCriteria": [
+                      "Sort code validation occurs on field exit",
+                      "Account number format checked in real-time",
+                      "Clear error messages displayed"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "metrics": {
+          "portfolioEpicsCount": 5,
+          "linkedFutureEpicsCount": 8,
+          "businessOutcomeMapping": "Increase digital payment adoption by 25%",
+          "featuresCount": 15,
+          "storiesCount": 45,
+          "ragStatus": "Green",
+          "customMetrics": {
+            "completionRate": 0.85,
+            "customerSatisfaction": 4.2,
+            "processingTime": "2.3 seconds"
+          }
+        },
+        "domainDecomposition": {
+          "id": "payment-domain",
+          "name": "Payment Processing Domain",
+          "description": "Handles all aspects of payment processing including domestic and international transfers",
+          "regulatoryFramework": "PSD2, Strong Customer Authentication, FCA Payment Services Regulations",
+          "complianceRequirements": [
+            "PSD2 Compliance",
+            "Anti-Money Laundering (AML)",
+            "Know Your Customer (KYC)",
+            "Strong Customer Authentication (SCA)",
+            "Payment Services Regulations 2017"
+          ],
+          "subDomains": [
+            {
+              "id": "domestic-payments",
+              "name": "Domestic Payments",
+              "description": "UK domestic payment processing via Faster Payments",
+              "services": ["PaymentValidation", "FasterPaymentsGateway", "PaymentStatus"],
+              "dataEntities": ["DomesticPayment", "PayeeBankDetails", "PaymentInstruction"]
+            },
+            {
+              "id": "international-payments", 
+              "name": "International Payments",
+              "description": "Cross-border payments via SWIFT and correspondent banking",
+              "services": ["SWIFTGateway", "CurrencyExchange", "ComplianceCheck"],
+              "dataEntities": ["InternationalPayment", "SWIFTMessage", "ExchangeRate"]
+            }
+          ]
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "conn-payment-account",
+        "fromJourneyId": "journey-make-payment",
+        "toJourneyId": "journey-account-management",
+        "type": "dependency",
+        "description": "Payments require account access and balance validation"
+      },
+      {
+        "id": "conn-payment-fraud",
+        "fromJourneyId": "journey-make-payment", 
+        "toJourneyId": "journey-fraud-prevention",
+        "type": "integration",
+        "description": "Real-time fraud checking during payment processing"
+      }
+    ],
+    "metadata": {
+      "version": "1.0.0",
+      "lastUpdated": "2024-01-26T00:00:00.000Z",
+      "totalJourneys": 34
+    }
+  },
+  "filterCriteria": {
+    "journeyName": "payment",
+    "epicStatus": ["Green", "Amber"],
+    "domain": ["Payments", "Account Services"],
+    "feature": "mobile",
+    "minRagStatus": "Amber"
+  },
+  "viewState": {
+    "zoomLevel": 1.0,
+    "centerPosition": { "x": 0, "y": 0 },
+    "selectedJourneyId": "journey-make-payment",
+    "selectedSubJourneyId": "subjourney-domestic-payment",
+    "showArchitecture": true,
+    "showPainPoints": true, 
+    "showMetrics": true,
+    "layoutOrientation": "horizontal",
+    "theme": "light"
+  },
+  "searchResults": [
+    {
+      "type": "journey",
+      "id": "journey-make-payment",
+      "title": "Make a Payment",
+      "description": "Enable customers to make domestic and international payments",
+      "relevanceScore": 95
+    },
+    {
+      "type": "epic",
+      "id": "epic-payment-ui-modernization", 
+      "title": "Payment UI Modernization",
+      "description": "Modernize payment interface across all channels",
+      "parentId": "journey-make-payment",
+      "relevanceScore": 85
+    },
+    {
+      "type": "feature",
+      "id": "feature-mobile-payment-flow",
+      "title": "Mobile Payment Flow Enhancement",
+      "description": "Streamlined mobile payment experience", 
+      "parentId": "journey-make-payment",
+      "relevanceScore": 75
+    }
+  ]
+}
